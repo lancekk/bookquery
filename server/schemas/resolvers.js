@@ -27,8 +27,8 @@ const resolvers = {
   Mutation: {
     addUser: async (parent, args) => {
       const user = await User.create(args);
-      const tk = signToken(user);
-      return {tk, user};
+      const token = signToken(user);
+      return {token, user};
     },
     login: async (parent, {email, password}) => {
       const user = await User.findOne({email});
@@ -43,14 +43,17 @@ const resolvers = {
         throw new AuthenticationError(LOGIN_FAIL_STRING);
       }
 
-      const tk = signToken(user);
-      return {tk, user};
+      const token = signToken(user);
+      return {token, user};
     },
     saveBook: async (parent, { book }, context) => {
       console.log(context?.user);
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
-          {_id: context.user._id},
+          {
+            _id: context.user._id,
+            bookCount: context.user.bookCount + 1
+          },
           {$addToSet: {savedBooks: book}},
           {new: true, runValidators: true}
         );
@@ -60,7 +63,7 @@ const resolvers = {
         throw new AuthenticationError("Save book requires login");
       }
     },
-    deleteBook: async (parent, {bookId}, context) => {
+    removeBook: async (parent, {bookId}, context) => {
       if (!context.user) {
         throw new AuthenticationError("Delete book requires login");
       }

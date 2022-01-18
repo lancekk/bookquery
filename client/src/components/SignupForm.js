@@ -31,10 +31,14 @@ const SignupForm = () => {
       event.stopPropagation();
     }
 
+    console.log(userFormData);
 
     try {
       // const response = await createUser(userFormData);
+      console.log('adding user')
+      console.log(`user form data: ${userFormData}`);
       const {data} = await addUser({ variables: { ...userFormData } });
+      console.log('added user')
 
       const {token,user} = data.addUser;
 

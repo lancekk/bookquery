@@ -19,6 +19,7 @@ const SavedBooks = () => {
 
   const userData = data?.me || {};
 
+  const [deleteBook, { error }] = useMutation(REMOVE_BOOK);
 
   ;
 
@@ -55,10 +56,9 @@ const SavedBooks = () => {
       return false;
     }
 
-    const [deleteBook, {data, loading, error}] = useMutation(REMOVE_BOOK, {bookId});
 
     try {
-      const updatedUser = await deleteBook();
+      const updatedUser = await deleteBook({variables: {bookId}});
       if (error) {
         throw new Error('something went wrong!');
       }
