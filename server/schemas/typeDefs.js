@@ -22,6 +22,7 @@ type Auth {
 }
 type Query {
   me: User
+  user: User
 }
 input BookData {
   authors: [String]
@@ -38,4 +39,6 @@ type Mutation {
   removeBook(bookId: String!): User
 }
 `;
+
+module.exports = typeDefs;
 
