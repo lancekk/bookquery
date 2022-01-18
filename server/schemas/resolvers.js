@@ -14,6 +14,7 @@ const resolvers = {
           .select(USER_SELECT_STRING)
           .populate('savedBooks');
 
+        console.log(`userData: ${userData}`);
         return userData;
       }
       throw new AuthenticationError('Not logged in');
@@ -47,12 +48,13 @@ const resolvers = {
       return {token, user};
     },
     saveBook: async (parent, { book }, context) => {
-      console.log(context?.user);
+      // console.log(`context.user: ${context?.user}`);
+      // console.log('context.user');
+      // console.log(context.user);
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
           {
             _id: context.user._id,
-            bookCount: context.user.bookCount + 1
           },
           {$addToSet: {savedBooks: book}},
           {new: true, runValidators: true}
